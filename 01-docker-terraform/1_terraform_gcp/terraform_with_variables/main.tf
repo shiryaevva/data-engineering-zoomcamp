@@ -8,16 +8,15 @@ terraform {
 }
 
 provider "google" {
-  # Credentials only needs to be set if you do not have the GOOGLE_APPLICATION_CREDENTIALS set
-  credentials = "./keys/my-creds.json"
-  project     = "reflected-mark-431723-c4"
-  region      = "us-central1"
+  credentials = var.credentials
+  project     = var.project
+  region      = var.region
 }
 
 
 resource "google_storage_bucket" "demo-bucket" {
-  name          = "terraform-demo-bucket-reflected-mark-431723-c4"
-  location      = "US"
+  name          = var.gcs_bucket_name
+  location      = var.location
   force_destroy = true
 
 
@@ -29,4 +28,10 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
+
+
+resource "google_bigquery_dataset" "demo_dataset" {
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 }
